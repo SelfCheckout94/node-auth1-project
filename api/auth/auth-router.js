@@ -29,29 +29,25 @@ router.post(
   }
 );
 
-/**
-  1 [POST] /api/auth/register { "username": "sue", "password": "1234" }
-
-  response:
-  status 200
-  {
-    "user_id": 2,
-    "username": "sue"
+router.post("/login", checkUsernameExists, async (req, res, next) => {
+  try {
+    const { password } = req.body;
+    if (req.user && bcrypt.compareSync(password, req.user.password)) {
+      req.session.user = req.user;
+      res.json({
+        status: 200,
+        message: `Welcome ${req.user.username}!`,
+      });
+    } else {
+      next({
+        status: 401,
+        message: "Invalid credentials",
+      });
+    }
+  } catch (err) {
+    next(err);
   }
-
-  response on username taken:
-  status 422
-  {
-    "message": "Username taken"
-  }
-
-  response on password three chars or less:
-  status 422
-  {
-    "message": "Password must be longer than 3 chars"
-  }
- */
-
+});
 /**
   2 [POST] /api/auth/login { "username": "sue", "password": "1234" }
 

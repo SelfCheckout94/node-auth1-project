@@ -27,7 +27,7 @@ server.use(cors());
 
 server.use(
   session({
-    name: "someCookieName",
+    name: "chocolatechip",
     secret: "nobody tosses a dwarf!",
     cookie: {
       maxAge: 1 * 24 * 60 * 60 * 1000,
